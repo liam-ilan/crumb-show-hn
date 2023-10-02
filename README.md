@@ -1,6 +1,8 @@
 # Crumb Show HN
 A simple Show HN Client, written in [Crumb](https://github.com/liam-ilan/crumb).
 
+![Screenshot of result](./media/screenshot.png)
+
 ## How To
 First, clone this repository,
 ```bash
