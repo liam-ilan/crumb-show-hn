@@ -1,5 +1,5 @@
-# Crumb Template
-This repo will help you start your own Crumb project. To find the Crumb source code, see https://github.com/liam-ilan/crumb.
+# Crumb Show HN
+A simple Show HN Client, written in [Crumb](https://github.com/liam-ilan/crumb).
 
 ## Getting Started
 > The Crumb interpreter is built for POSIX compliant systems, and utilizes `ioctl.h` and `unistd.h`. To use Crumb on windows, either use WSL, or use a Linux container.

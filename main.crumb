@@ -1,1 +1,94 @@
-(print "Welcome to Crumb!\n")
+// split a string on a single char separator
+split = {in sep ->
+  // convert to list of chars
+  arr = (map (range (length in)) {index _ -> <- (get in index)})
+
+  // reduce list of chars to list of words
+  <- (if (is sep "") {<- arr} {
+    <- (reduce arr {acc char _ ->
+      last_index = (subtract (length acc) 1)
+
+      <- (if (is char sep) {
+        // add new item to result if we come across a separator
+        <- (insert acc "") 
+      } {
+        // else, add char to the last item
+        <- (set acc (insert (get acc last_index) char) last_index)
+      })
+    } (list ""))
+  })
+}
+
+// get space filled string of length n
+space_string = {n -> 
+  <- (reduce (range n) {acc item i -> <- (join " " acc)} "")
+}
+
+(print "Loading top 30 posts...\n")
+
+// get top 30 ids
+top_ids_raw = (shell "curl -s https://hacker-news.firebaseio.com/v0/showstories.json")
+top_ids_parsed = (split (get top_ids_raw 1 (subtract (length top_ids_raw) 1)) ",")
+top_ids_parsed = (get top_ids_parsed 0 30)
+(print "Recieved list of top 30 posts...\n")
+
+// pull top stories (parse json with jq)
+top_stories = (map top_ids_parsed {id i ->
+  (print "Loading post" (add i 1) "/ 30..." "\r")
+
+  <- (get (split (shell (join 
+    "curl -s https://hacker-news.firebaseio.com/v0/item/" id ".json" 
+    " | jq -r '.by , .title, .url, .score'"
+  )) "\n") 0 4)
+})
+
+// go to top corner and clear
+(print "\e[H\e[2J")
+
+(use "colors.crumb" {
+
+  // heading backround
+  (print (background "#ff6600" (space_string (columns))))
+  (print "\e[H")
+
+  // make heading
+  heading = (join
+    (color "#000000" (background "#ff6600" " "))
+    (color "#ffffff" (background "#ff6600" (bold "🅈")))
+    (color "#000000" (background "#ff6600" " Hacker News - Show HN in Crumb\n"))
+  )
+
+  (print heading)
+
+  // for each top story
+  (map top_stories {story i ->
+
+    // pull data
+    name = (get story 0)
+    title = (get story 1)
+    link = (get story 2)
+    points = (get story 3)
+
+    // set up number (eg. "1)", "2)", "3)")
+    number_label = (join " " (string (add i 1)) ") ")
+    indentation = (space_string (length number_label))
+
+    // print first line background
+    (print (join "\r" (background "#f6f6ef" (space_string (columns)))))
+    (print "\r")
+
+    // print first line
+    (print (color "#000000" (background "#f6f6ef" (join number_label title "\n"))))
+
+    // print second line background
+    (print (join "\r" (background "#f6f6ef" (space_string (columns)))))
+    (print "\r")
+
+    // print second line
+    (print (color "#000000" (background "#f6f6ef" 
+      (join indentation (underline link) " | " points " points by " name "\n")
+    )))
+  })
+})
+
+(print "\n")
