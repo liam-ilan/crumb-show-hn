@@ -1,12 +1,13 @@
 # Crumb Show HN
 A simple Show HN Client, written in [Crumb](https://github.com/liam-ilan/crumb).
 
-## Getting Started
-> The Crumb interpreter is built for POSIX compliant systems, and utilizes `ioctl.h` and `unistd.h`. To use Crumb on windows, either use WSL, or use a Linux container.
+## How To
+First, clone this repository,
+```bash
+git clone https://github.com/liam-ilan/crumb-show-hn.git
+```
 
-To get started with Crumb, create a new repository based off of this template, by clicking the green "Use this template" button at the top right corner.
-
-Then pull your repository, and run
+Then, built the Crumb interpreter with,
 ```bash
 chmod +x build-crumb.sh && ./build-crumb.sh
 ```
@@ -15,11 +16,8 @@ Now you're all set! Just do
 ```bash
 ./crumb main.crumb
 ```
-to run `main.crumb`.
+to run the client!
 
-## Basics
-See https://github.com/liam-ilan/crumb#basics.
-
-## Docs
-- See https://github.com/liam-ilan/crumb#standard-library for more info on the standard libary.
-- See https://github.com/liam-ilan/crumb#syntax for a syntax reference.
+## Credit
+- (c) [Liam Ilan](https://www.liamilan.com/)
+- Built using [`colors.crumb`](https://github.com/ronilan/colors.crumb)
